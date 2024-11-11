@@ -1,0 +1,9 @@
+- hosts: all
+  tasks:
+    - name: Backup application data and Redis
+      archive:
+        path:
+          - /root/HW/urless-master/api/data
+          - /etc/redis/redis.conf
+        dest: /backups/HW_backup-{{ ansible_date_time.date }}.tar.gz
+

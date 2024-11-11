@@ -1,0 +1,20 @@
+- hosts: webservers
+  tasks:
+    - name: Pull latest code from GitHub
+      git:
+        repo: 'https://github.com/****************/urless-master.git'
+        dest: /root/HW/urless-master
+        version: main
+        force: yes
+
+    - name: Install dependencies
+      command: pip3 install -r /root/HW/urless-master/api/requirements.txt
+
+    - name: Run unit tests
+      command: pytest /root/HW/urless-master/api/test_main.py
+
+    - name: Restart application services
+      systemd:
+        name: urless
+        state: restarted
+

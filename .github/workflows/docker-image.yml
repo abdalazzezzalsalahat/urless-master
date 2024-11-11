@@ -1,0 +1,29 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: docker login
+        run: echo ${{secrets.DOCKERHUBPASSWORD}} | docker login -u ${{secrets.DOCKERHUBUSER}} --password-stdin
+
+      - name: Build the API Docker image
+        run: docker build . --file Dockerfile.api --tag ${{secrets.DOCKERHUBUSER}}/urless:latest-api
+
+      - name: Build the Frontend Docker image
+        run: docker build . --file Dockerfile.frontend --tag ${{secrets.DOCKERHUBUSER}}/urless:latest-frontend
+
+      - name: Publish the Frontend Docker image
+        run: docker push  ${{secrets.DOCKERHUBUSER}}/urless:latest-frontend
+
+      - name: Publish the API Docker image
+        run: docker push ${{secrets.DOCKERHUBUSER}}/urless:latest-api

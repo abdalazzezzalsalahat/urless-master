@@ -1,0 +1,7 @@
+- hosts: all
+  tasks:
+    - name: Restore from the latest backup
+      unarchive:
+        src: /backups/HW_latest-backup.tar.gz
+        dest: /
+        remote_src: yes
